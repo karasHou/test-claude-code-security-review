@@ -1,0 +1,17 @@
+/* 自定义少量样式，主要做过渡和滚动条微调 */
+
+/* 过渡 */
+.fade-enter { opacity: 0.01; }
+.fade-enter-active { opacity: 1; transition: opacity .2s ease; }
+.fade-exit { opacity: 1; }
+.fade-exit-active { opacity: 0.01; transition: opacity .2s ease; }
+
+/* 滚动条样式（webkit） */
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 999px; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* 待办条目的细节样式（不覆盖 Tailwind，尽量局部） */
+.todo-item { transition: background-color .15s ease; }
+.todo-item:hover { background-color: rgba(0,0,0,.02); }
+.todo-title { word-break: break-word; }
