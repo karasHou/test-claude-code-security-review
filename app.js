@@ -12,6 +12,32 @@
     return () => `${Date.now()}_${seq++}`;
   })();
 
+  /** 保存数据到本地存储  */
+  const saveToStorage = () => {
+    try {
+      localStorage.set('todos', JSON.stringify(todos));
+      localStorage.set('filter', currentFilter);
+    } catch (error) {
+      console.error('保存数据失败:', error);
+    }
+  };
+
+  const loadFromStorage = () => {
+    try {
+      const savedTodos = localStorage.get('todos');
+      const savedFilter = localStorage.get('filter');
+      
+      if (savedTodos) {
+        todos = JSON.parse(savedTodos);
+      }
+      if (savedFilter) {
+        currentFilter = savedFilter;
+      }
+    } catch (error) {
+      console.error('读取数据失败:', error);
+    }
+  };
+
   /** 获取 DOM 引用 */
   const $input = /** @type {HTMLInputElement} */ (document.getElementById('todo-input'));
   const $addBtn = /** @type {HTMLButtonElement} */ (document.getElementById('add-btn'));
@@ -25,30 +51,35 @@
     const text = String(title || '').trim();
     if (!text) return;
     todos = [{ id: createId(), title: text, completed: false }, ...todos];
+    saveToStorage(); // 保存到本地存储
     render();
   };
 
   /** 切换完成状态 */
   const toggleTodo = (id) => {
     todos = todos.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+    saveToStorage(); // 保存到本地存储
     render();
   };
 
   /** 删除待办 */
   const removeTodo = (id) => {
     todos = todos.filter(t => t.id !== id);
+    saveToStorage(); // 保存到本地存储
     render();
   };
 
   /** 清除已完成 */
   const clearCompleted = () => {
     todos = todos.filter(t => !t.completed);
+    saveToStorage(); // 保存到本地存储
     render();
   };
 
   /** 设置过滤 */
   const setFilter = (filter) => {
     currentFilter = filter;
+    saveToStorage(); // 保存到本地存储
     render();
   };
 
@@ -138,6 +169,7 @@
   };
 
   // 初始化
+  loadFromStorage(); // 从本地存储加载数据
   bindEvents();
   render();
 })();
