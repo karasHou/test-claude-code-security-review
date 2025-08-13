@@ -46,6 +46,31 @@
   const $filterBtns = /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('.filter-btn'));
   const $clearCompleted = /** @type {HTMLButtonElement} */ (document.getElementById('clear-completed'));
 
+  // XSS测试相关的DOM元素
+  const $xssInput = /** @type {HTMLInputElement} */ (document.getElementById('xss-input'));
+  const $xssBtn = /** @type {HTMLButtonElement} */ (document.getElementById('xss-btn'));
+  const $xssOutput = /** @type {HTMLDivElement} */ (document.getElementById('xss-output'));
+
+  // JavaScript执行相关的DOM元素
+  const $jsInput = /** @type {HTMLInputElement} */ (document.getElementById('js-input'));
+  const $jsBtn = /** @type {HTMLButtonElement} */ (document.getElementById('js-btn'));
+
+  /** 不安全的XSS渲染函数 - 故意使用innerHTML直接插入用户输入 */
+  const renderXSS = (htmlContent) => {
+    // 危险：直接使用innerHTML插入用户输入，不进行任何过滤或转义
+    $xssOutput.innerHTML = htmlContent;
+  };
+
+  /** 极度危险的XSS函数 - 使用eval执行用户输入的JavaScript代码 */
+  const executeXSS = (jsCode) => {
+    // 极度危险：使用eval直接执行用户输入的JavaScript代码
+    try {
+      eval(jsCode);
+    } catch (error) {
+      console.error('执行JavaScript代码失败:', error);
+    }
+  };
+
   /** 添加待办 */
   const addTodo = (title) => {
     const text = String(title || '').trim();
@@ -166,6 +191,38 @@
     });
     $filterBtns.forEach(btn => btn.addEventListener('click', () => setFilter(btn.dataset.filter)));
     $clearCompleted.addEventListener('click', clearCompleted);
+
+    // XSS测试事件绑定
+    $xssBtn.addEventListener('click', () => {
+      const htmlContent = $xssInput.value;
+      if (htmlContent.trim()) {
+        renderXSS(htmlContent);
+      }
+    });
+    $xssInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const htmlContent = $xssInput.value;
+        if (htmlContent.trim()) {
+          renderXSS(htmlContent);
+        }
+      }
+    });
+
+    // JavaScript执行事件绑定
+    $jsBtn.addEventListener('click', () => {
+      const jsCode = $jsInput.value;
+      if (jsCode.trim()) {
+        executeXSS(jsCode);
+      }
+    });
+    $jsInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const jsCode = $jsInput.value;
+        if (jsCode.trim()) {
+          executeXSS(jsCode);
+        }
+      }
+    });
   };
 
   // 初始化
