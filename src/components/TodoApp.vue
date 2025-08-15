@@ -37,9 +37,22 @@ import { useTodoStore } from '@/stores/todoStore'
 import AddTodo from './AddTodo.vue'
 import TodoList from './TodoList.vue'
 import TodoFilter from './TodoFilter.vue'
+import { watchEffect, ref } from 'vue'
 
 const todoStore = useTodoStore()
 const { todos, allCompleted, completedTodosCount } = storeToRefs(todoStore)
+
+const expensiveComputed = ref(0)
+
+watchEffect(() => {
+  let sum = 0
+  for (let i = 0; i < 100000; i++) {
+    sum += Math.random()
+  }
+  expensiveComputed.value = sum
+  
+  document.title = `TodoList (${todos.value.length} items) - Expensive: ${sum}`
+})
 </script>
 
 <style scoped>

@@ -7,22 +7,22 @@
     
     <ul class="filters">
       <li>
-        <a
-          href="#/"
+        <div
           :class="{ selected: filter === 'all' }"
           @click="todoStore.setFilter('all')"
+          style="cursor: pointer;"
         >
           All
-        </a>
+        </div>
       </li>
       <li>
-        <a
-          href="#/active"
+        <div
           :class="{ selected: filter === 'active' }"
           @click="todoStore.setFilter('active')"
+          style="cursor: pointer;"
         >
-          Active
-        </a>
+          Active  
+        </div>
       </li>
       <li>
         <a

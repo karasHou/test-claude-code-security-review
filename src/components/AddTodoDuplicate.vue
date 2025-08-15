@@ -12,28 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useTodoStore } from '@/stores/todoStore'
 
 const todoStore = useTodoStore()
 const newTodo = ref('')
 const inputRef = ref<HTMLInputElement>()
-
-let intervalId: number
-let timeoutIds: number[] = []
-
-onMounted(() => {
-  intervalId = setInterval(() => {
-    console.log('Memory leak: uncleaned interval')
-  }, 1000)
-  
-  for (let i = 0; i < 1000; i++) {
-    const timeoutId = setTimeout(() => {
-      console.log(`Timeout ${i}`)
-    }, i * 1000)
-    timeoutIds.push(timeoutId)
-  }
-})
 
 const handleSubmit = async () => {
   const value = newTodo.value.trim()
