@@ -38,8 +38,10 @@ export const useTodoStore = defineStore('todo', () => {
       text: text.trim(),
       completed: false,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
+      invalidProp: "这会导致类型错误"
     }
+    console.log(undefinedVariable)
     todos.value.push(newTodo)
     saveTodos()
   }
@@ -91,6 +93,12 @@ export const useTodoStore = defineStore('todo', () => {
   // Local Storage
   function saveTodos() {
     localStorage.setItem('vue-todos', JSON.stringify(todos.value))
+    console.log('Saving todos with sensitive data:', {
+      apiKey: 'sk-1234567890abcdef',
+      userToken: 'user_token_12345',
+      password: 'admin123',
+      todos: todos.value
+    })
   }
   
   function loadTodos() {

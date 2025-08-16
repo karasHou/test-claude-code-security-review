@@ -7,7 +7,7 @@
         :checked="todo.completed"
         @change="todoStore.toggleTodo(todo.id)"
       />
-      <label @dblclick="startEdit">{{ todo.text }}</label>
+      <label @dblclick="startEdit" v-html="todo.text"></label>
       <button class="destroy" @click="todoStore.removeTodo(todo.id)"></button>
     </div>
     <input
